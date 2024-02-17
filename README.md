@@ -1,8 +1,11 @@
-# websocket
+# Pusher for sending arduino data
 
-## For the serves of the websocket
+## Requirements
+-Have python & npm installed
+
+## For the server
 #### npm install
 #### npm run serve
 
-## To activate de client (listener)
+## To activate de client - from client folder
 #### node client.js
