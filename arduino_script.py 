@@ -1,0 +1,36 @@
+import serial
+import pusher
+
+# Configuración de Pusher
+pusher_client = pusher.Pusher(
+    app_id='PUSHER_ID',
+    key='PUSHER_KEY',
+    secret='PUSHER_SECRET',
+    cluster='PUSHER_CLUSTER',
+    ssl=True
+)
+
+# Reemplaza '/dev/...' con el puerto serial correcto
+ser = serial.Serial('/dev/cu.usbmodem1301', 9600)
+
+# Función para manejar la recepción de mensajes
+def receive_data(data):
+    print('Datos recibidos:', data)
+    # Envía los datos a Pusher
+    pusher_client.trigger('arduino-channel', 'new-data', {'data': data})
+
+# Función principal
+def main():
+    # Itera indefinidamente para leer datos del puerto serial
+    while True:
+        try:
+            # Lee los datos del puerto serial
+            data = ser.readline().strip().decode('utf-8')
+            # Maneja los datos recibidos
+            receive_data(data)
+        except Exception as e:
+            print('Error al leer datos del puerto serial:', e)
+
+# Ejecuta la función principal
+if __name__ == '__main__':
+    main()

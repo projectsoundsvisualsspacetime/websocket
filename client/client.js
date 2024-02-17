@@ -1,27 +1,15 @@
-const WebSocket = require('ws');
+const Pusher = require('pusher-js');
 
-// URL del servidor WebSocket
-const serverUrl = 'ws://localhost:8080';
 
-// Crear una instancia del cliente WebSocket y conectar al servidor
-const ws = new WebSocket(serverUrl);
 
-// Manejar eventos del cliente WebSocket
-ws.on('open', function open() {
-  console.log('Conexión establecida con el servidor');
-  
-  // Enviar un mensaje al servidor
-  ws.send('¡Hola, servidor!');
+const pusher = new Pusher('PUSHER_KEY', {
+  cluster: 'PUSHER_CLUSTER',
+  useTLS: true
 });
 
-ws.on('message', function incoming(data) {
+
+const channel = pusher.subscribe('my-channel');
+
+channel.bind('my-event', function(data) {
   console.log('Mensaje recibido del servidor:', data);
-});
-
-ws.on('error', function(error) {
-  console.error('Error en la conexión:', error);
-});
-
-ws.on('close', function close() {
-  console.log('Conexión cerrada');
 });
